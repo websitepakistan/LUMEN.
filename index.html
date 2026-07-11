@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LUMEN — The Electro Shop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,450;9..144,600&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0b0d;
+    --bg-alt:#131316;
+    --panel:#17171a;
+    --gold:#c9a24b;
+    --gold-bright:#e8c874;
+    --ivory:#f3ede1;
+    --muted:#8b8a86;
+    --line:#2a2a2e;
+    --radius:2px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--ivory);
+    font-family:'Manrope', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{ background:var(--gold); color:#0b0b0d; }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:450;
+    letter-spacing:-0.01em;
+  }
+  .mono{
+    font-family:'JetBrains Mono', monospace;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+  @media (max-width:640px){ .wrap{ padding:0 20px; } }
+
+  /* ---------- Header ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(11,11,13,0.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 32px;
+    max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces', serif;
+    font-size:1.5rem;
+    font-weight:600;
+    letter-spacing:0.04em;
+  }
+  .logo span{ color:var(--gold); }
+  .logo-wrap{ line-height:1.15; }
+  .logo-tag{
+    font-size:0.56rem; color:var(--muted);
+    letter-spacing:0.2em; margin-top:2px;
+  }
+  .nav-links{ display:flex; gap:40px; align-items:center; }
+  .nav-links a{
+    font-size:0.8rem;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--muted);
+    transition:color .25s ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{ color:var(--ivory); }
+  .nav-cta{
+    border:1px solid var(--gold);
+    color:var(--gold) !important;
+    padding:9px 20px;
+    border-radius:var(--radius);
+    transition:all .25s ease;
+  }
+  .nav-cta:hover{ background:var(--gold); color:var(--bg) !important; }
+  .menu-btn{ display:none; background:none; border:none; color:var(--ivory); font-size:1.4rem; cursor:pointer; }
+
+  @media (max-width:800px){
+    .nav-links{
+      position:fixed; top:73px; left:0; right:0;
+      flex-direction:column; align-items:flex-start; gap:0;
+      background:var(--bg-alt); border-bottom:1px solid var(--line);
+      max-height:0; overflow:hidden; transition:max-height .3s ease;
+    }
+    .nav-links.open{ max-height:320px; }
+    .nav-links a{ width:100%; padding:16px 32px; border-bottom:1px solid var(--line); }
+    .nav-cta{ margin:16px 32px; }
+    .menu-btn{ display:block; }
+  }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:180px 0 120px;
+    position:relative;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:center;
+  }
+  @media (max-width:900px){ .hero-grid{ grid-template-columns:1fr; } }
+
+  .eyebrow{
+    color:var(--gold); font-size:0.72rem; margin-bottom:22px; display:block;
+  }
+  .hero h1{
+    font-size:clamp(2.4rem, 5vw, 4.2rem);
+    line-height:1.05;
+    margin-bottom:26px;
+  }
+  .hero h1 em{ color:var(--gold); font-style:normal; }
+  .hero p{
+    color:var(--muted); font-size:1.05rem; max-width:460px; margin-bottom:36px;
+  }
+  .btn-row{ display:flex; gap:16px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:10px;
+    padding:15px 28px; border-radius:var(--radius);
+    font-size:0.85rem; letter-spacing:0.04em; font-weight:600;
+    transition:all .25s ease; cursor:pointer; border:1px solid transparent;
+  }
+  .btn-primary{ background:var(--gold); color:var(--bg); }
+  .btn-primary:hover{ background:var(--gold-bright); transform:translateY(-2px); }
+  .btn-ghost{ border-color:var(--line); color:var(--ivory); }
+  .btn-ghost:hover{ border-color:var(--gold); color:var(--gold); }
+
+  /* Signature: spec plate */
+  .plate{
+    background:linear-gradient(160deg, var(--panel), var(--bg-alt));
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:36px;
+    position:relative;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .plate::before{
+    content:'';
+    position:absolute; inset:10px;
+    border:1px solid rgba(201,162,75,0.25);
+    border-radius:2px;
+    pointer-events:none;
+  }
+  .plate-top{
+    display:flex; justify-content:space-between; align-items:flex-start;
+    margin-bottom:28px; font-size:0.68rem; color:var(--muted);
+  }
+  .plate-top .code{ color:var(--gold); }
+  .plate-glow{
+    width:100%; height:180px; border-radius:2px; margin-bottom:24px;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(201,162,75,0.35), transparent 60%),
+      linear-gradient(135deg, #1c1c20, #0e0e10);
+    position:relative; overflow:hidden;
+  }
+  .plate-glow::after{
+    content:'';
+    position:absolute; width:140%; height:2px; left:-20%; top:50%;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity:0.5;
+  }
+  .plate-spec{
+    display:flex; justify-content:space-between; font-size:0.75rem;
+    padding:10px 0; border-top:1px solid var(--line); color:var(--muted);
+  }
+  .plate-spec span:last-child{ color:var(--ivory); }
+
+  /* ---------- Marquee ---------- */
+  .marquee{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:22px 0; overflow:hidden; white-space:nowrap;
+  }
+  .marquee-track{
+    display:inline-block; animation:scroll 28s linear infinite;
+    font-family:'JetBrains Mono', monospace; font-size:0.85rem; letter-spacing:0.15em;
+    color:var(--muted); text-transform:uppercase;
+  }
+  .marquee-track span{ margin:0 34px; }
+  .marquee-track span em{ color:var(--gold); font-style:normal; }
+  @keyframes scroll{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+
+  /* ---------- Section heading ---------- */
+  .section{ padding:110px 0; }
+  .section-head{
+    display:flex; justify-content:space-between; align-items:flex-end;
+    margin-bottom:56px; gap:20px; flex-wrap:wrap;
+    border-bottom:1px solid var(--line); padding-bottom:28px;
+  }
+  .section-head h2{ font-size:clamp(1.8rem, 3vw, 2.6rem); }
+  .section-head .num{ color:var(--gold); font-size:0.72rem; }
+
+  /* ---------- Products ---------- */
+  .products-grid{
+    display:grid; grid-template-columns:repeat(3, 1fr); gap:1px;
+    background:var(--line); border:1px solid var(--line);
+  }
+  @media (max-width:900px){ .products-grid{ grid-template-columns:repeat(2, 1fr); } }
+  @media (max-width:600px){ .products-grid{ grid-template-columns:1fr; } }
+
+  .product{
+    background:var(--bg); padding:32px; display:flex; flex-direction:column;
+    transition:background .25s ease;
+  }
+  .product:hover{ background:var(--bg-alt); }
+  .product-visual{
+    height:160px; border-radius:2px; margin-bottom:24px;
+    background:radial-gradient(circle at 70% 20%, rgba(201,162,75,0.18), transparent 65%), var(--panel);
+    border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace; font-size:0.7rem; color:var(--gold);
+    letter-spacing:0.1em;
+  }
+  .product-code{ font-size:0.68rem; color:var(--muted); margin-bottom:10px; }
+  .product h3{ font-size:1.2rem; margin-bottom:8px; font-weight:450; }
+  .product-desc{ color:var(--muted); font-size:0.88rem; margin-bottom:20px; flex-grow:1; }
+  .product-foot{
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--line); padding-top:18px;
+  }
+  .price{ font-family:'JetBrains Mono', monospace; color:var(--gold); font-size:1rem; }
+  .enquire{
+    font-size:0.72rem; letter-spacing:0.06em; text-transform:uppercase;
+    color:var(--muted); border-bottom:1px solid var(--muted);
+    transition:all .2s ease; cursor:pointer; background:none; border-left:none; border-right:none; border-top:none;
+    padding:0 0 2px;
+  }
+  .enquire:hover{ color:var(--gold); border-color:var(--gold); }
+
+  /* ---------- Features ---------- */
+  .features{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:40px;
+  }
+  @media (max-width:800px){ .features{ grid-template-columns:1fr; } }
+  .feature .fnum{ color:var(--gold); font-size:0.72rem; margin-bottom:16px; display:block; }
+  .feature h3{ font-size:1.15rem; margin-bottom:10px; font-weight:450; }
+  .feature p{ color:var(--muted); font-size:0.9rem; }
+
+  /* ---------- Contact ---------- */
+  .contact{
+    background:var(--bg-alt); border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+  }
+  .contact-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center;
+  }
+  @media (max-width:800px){ .contact-grid{ grid-template-columns:1fr; } }
+  .contact h2{ font-size:clamp(1.8rem,3vw,2.5rem); margin-bottom:20px; }
+  .contact p{ color:var(--muted); margin-bottom:32px; max-width:420px; }
+  .contact-cards{ display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); }
+  .contact-card{
+    background:var(--bg); padding:26px 28px; display:flex; justify-content:space-between; align-items:center;
+    transition:background .2s ease;
+  }
+  .contact-card:hover{ background:var(--panel); }
+  .contact-card .label{ font-size:0.68rem; color:var(--muted); margin-bottom:6px; }
+  .contact-card .value{ font-size:1rem; }
+  .contact-card .go{ color:var(--gold); font-size:1.2rem; }
+
+  /* ---------- Footer ---------- */
+  footer{ padding:50px 0; }
+  .footer-row{
+    display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;
+    font-size:0.78rem; color:var(--muted);
+  }
+  .footer-row a:hover{ color:var(--gold); }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="logo-wrap">
+      <div class="logo">LUM<span>E</span>N</div>
+      <div class="logo-tag mono">The Electro Shop</div>
+    </div>
+    <div class="nav-links" id="navLinks">
+      <a href="#shop">Shop</a>
+      <a href="#why">Craft</a>
+      <a href="#contact">Contact</a>
+      <a href="#contact" class="nav-cta">Enquire</a>
+    </div>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow mono">Precision Electronics — Est. Collection 01</span>
+      <h1>Engineering, <em>finished</em><br>like an heirloom.</h1>
+      <p>Every LUMEN device is machined, calibrated and hand-finished before it leaves the bench. No product ships until it earns its serial number.</p>
+      <div class="btn-row">
+        <a href="#shop" class="btn btn-primary">View the collection</a>
+        <a href="#contact" class="btn btn-ghost">Talk to us</a>
+      </div>
+    </div>
+    <div class="plate">
+      <div class="plate-top mono">
+        <span>Model Plate</span>
+        <span class="code">LX&nbsp;/&nbsp;04</span>
+      </div>
+      <div class="plate-glow"></div>
+      <div class="plate-spec"><span>Housing</span><span>Aerospace-grade Titanium</span></div>
+      <div class="plate-spec"><span>Finish</span><span>Hand-polished, gold accent</span></div>
+      <div class="plate-spec"><span>Calibrated</span><span>By hand, on the bench</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span>Titanium <em>Housings</em></span>
+    <span>Hand-Calibrated <em>Optics</em></span>
+    <span>Brass & Walnut <em>Finishes</em></span>
+    <span>Serialized <em>Editions</em></span>
+    <span>Titanium <em>Housings</em></span>
+    <span>Hand-Calibrated <em>Optics</em></span>
+    <span>Brass & Walnut <em>Finishes</em></span>
+    <span>Serialized <em>Editions</em></span>
+  </div>
+</div>
+
+<section class="section" id="shop">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>The Collection</h2>
+      <span class="num mono">06 Devices</span>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<section class="section" id="why">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Why LUMEN</h2>
+      <span class="num mono">Our Craft</span>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <span class="fnum mono">Bench-Tested</span>
+        <h3>Calibrated by hand</h3>
+        <p>Each unit is tuned individually before packaging — not sampled off a production line.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum mono">Materials</span>
+        <h3>Built to outlast the trend cycle</h3>
+        <p>Titanium, brass and walnut instead of gloss plastic — devices meant to be kept, not replaced.</p>
+      </div>
+      <div class="feature">
+        <span class="fnum mono">Small Batch</span>
+        <h3>Serialized editions</h3>
+        <p>Every device carries its own plate number. What you own was never made at scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="wrap section">
+    <div class="contact-grid">
+      <div>
+        <h2>Own the next serial number.</h2>
+        <p>Message us directly — every enquiry is answered by a person, not a queue.</p>
+      </div>
+      <div class="contact-cards">
+        <a class="contact-card" id="mailLink" href="#">
+          <div>
+            <div class="label mono">Email</div>
+            <div class="value">aunabbaskhan125@gmail.com</div>
+          </div>
+          <span class="go">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>© 2026 LUMEN — The Electro Shop. All rights reserved.</span>
+    <span><a href="#shop">Shop</a> &nbsp;·&nbsp; <a href="#why">Craft</a> &nbsp;·&nbsp; <a href="#contact">Contact</a></span>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu
+  const menuBtn = document.getElementById('menuBtn');
+  const navLinks = document.getElementById('navLinks');
+  menuBtn.addEventListener('click', () => navLinks.classList.toggle('open'));
+
+  // --- EDIT YOUR CONTACT DETAILS HERE ---
+  const EMAIL_ADDRESS = "aunabbaskhan125@gmail.com";
+
+  document.getElementById('mailLink').href = `mailto:${EMAIL_ADDRESS}`;
+
+  // --- EDIT YOUR PRODUCTS HERE ---
+  const PRODUCTS = [
+    { code:"LX-01", name:"Aurum Wireless Earbuds", desc:"Active noise cancelling, titanium housing, 30hr charge case.", price:"$249" },
+    { code:"LX-02", name:"Solstice Mechanical Keyboard", desc:"Hot-swappable switches, solid brass weighted plate.", price:"$389" },
+    { code:"LX-03", name:"Halo Adaptive Desk Lamp", desc:"Anodized aluminum body, daylight-adaptive temperature.", price:"$179" },
+    { code:"LX-04", name:"Meridian Power Reserve", desc:"20,000mAh ceramic-coated power bank, 100W pass-through.", price:"$139" },
+    { code:"LX-05", name:"Obsidian 4K Studio Camera", desc:"Sapphire lens cover, low-light sensor, walnut base.", price:"$459" },
+    { code:"LX-06", name:"Cinder Bluetooth Speaker", desc:"Hand-finished walnut cabinet, 24-hour battery.", price:"$299" }
+  ];
+
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = PRODUCTS.map(p => `
+    <div class="product">
+      <div class="product-visual mono">${p.code}</div>
+      <div class="product-code mono">Model ${p.code}</div>
+      <h3>${p.name}</h3>
+      <p class="product-desc">${p.desc}</p>
+      <div class="product-foot">
+        <span class="price">${p.price}</span>
+        <button class="enquire" onclick="enquire('${p.name.replace(/'/g,"")}','${p.code}')">Enquire →</button>
+      </div>
+    </div>
+  `).join('');
+
+  function enquire(name, code){
+    const subject = encodeURIComponent(`Enquiry: ${name} (${code})`);
+    const body = encodeURIComponent(`Hi LUMEN, I'm interested in the ${name} (${code}). Is it available?`);
+    window.location.href = `mailto:${EMAIL_ADDRESS}?subject=${subject}&body=${body}`;
+  }
+</script>
+
+</body>
+</html>
